@@ -54,10 +54,55 @@ pacientesRouter.post("/", async (req, res) => {
     if(error instanceof Error) {
       errorMessage += error.message;
     }
+    console.error(errorMessage);
     res.status(400).send(errorMessage);
   }
 });
 
+pacientesRouter.put("/:id", async (req, res) => {
+  const id = req?.params?.id;
 
+  try {
+    const updatePaciente: Paciente = req.body as Paciente;
+    const query = { _id: new ObjectId(id) };
+
+    const result = await collections.pacientes?.updateOne(query, { set: updatePaciente });
+
+    result
+      ? res.status(200).send(`Successfully update patient with id ${id}`)
+      : res.status(304).send(`Patient with id ${id} not update`);
+  } catch (error: unknown) {
+    let errorMessage = "Error: ";
+    if(error instanceof Error) {
+      errorMessage += error.message;
+    }
+    console.error(errorMessage);
+    res.status(400).send(errorMessage);
+  }
+});
+
+pacientesRouter.delete("/:id", async (req, res) => {
+  const id = req?.params?.id;
+
+  try {
+    const query = { _id: new ObjectId(id) };
+    const result = await collections.pacientes?.deleteOne(query);
+
+    if(result && result.deletedCount) {
+      res.status(202).send(`Successfully removed patient with id ${id}`);
+    } else if(!result) {
+      res.status(400).send(`Failed to remove patient with id ${id}`);
+    } else if(!result.deletedCount) {
+      res.status(404).send(`Patient with id ${id} does not exist`);
+    }
+  } catch (error: unknown) {
+    let errorMessage = "Error: ";
+    if(error instanceof Error) {
+      errorMessage += error.message;
+    }
+    console.error(errorMessage);
+    res.status(400).send(errorMessage);
+  }
+});
 
 export default pacientesRouter;
