@@ -15,5 +15,5 @@ export interface DiagnosticosInterface {
 
 export type pacientesSinSsn = Omit<PacientesInterface, "ssn">;
 
-export type pacienteNuevo = Omit<PacientesInterface, "id">;
+export type pacienteNuevoInterface = Omit<PacientesInterface, "id">;
 /**Refactoriza el campo gender para usar un tipo enum. */
