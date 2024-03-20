@@ -66,7 +66,7 @@ pacientesRouter.put("/:id", async (req, res) => {
     const updatePaciente: Paciente = req.body as Paciente;
     const query = { _id: new ObjectId(id) };
 
-    const result = await collections.pacientes?.updateOne(query, { set: updatePaciente });
+    const result = await collections.pacientes?.updateOne(query, { $set: updatePaciente });
 
     result
       ? res.status(200).send(`Successfully update patient with id ${id}`)
